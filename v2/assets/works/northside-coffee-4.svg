@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" font-family="Inter, Arial, sans-serif">
+  <title>Placeholder: branding signage</title>
+  <rect width="1280" height="720" fill="#000000"/>
+  <rect x="18" y="18" width="1244" height="684" fill="none" stroke="#bdbdbd" stroke-width="1"/>
+  <g fill="none" stroke-width="3">
+    <circle cx="640" cy="302.4" r="158.4" stroke="#FFFFFF"/>
+    <circle cx="640" cy="302.4" r="71.28" stroke="#CE3029"/>
+    <path d="M640 64.79999999999995V207.35999999999996M640 397.44V540M402.4 302.4H544.96M735.04 302.4H877.6" stroke="#FFFFFF"/>
+  </g>
+  <text x="36" y="68" font-size="20" font-weight="600" letter-spacing="3.5999999999999996" fill="#bdbdbd">BRANDING</text>
+  <text x="1244" y="68" font-size="20" font-weight="600" letter-spacing="3.5999999999999996" fill="#bdbdbd" text-anchor="end">04 / 04</text>
+  <text x="36" y="640" font-size="61" font-weight="700" fill="#FFFFFF">PLACEHOLDER</text>
+  <text x="36" y="684" font-size="20" font-weight="600" letter-spacing="3.5999999999999996" fill="#bdbdbd">SIGNAGE</text>
+</svg>
