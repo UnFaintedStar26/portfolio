@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" font-family="Inter, Arial, sans-serif">
+  <title>Placeholder: branding stationery</title>
+  <rect width="1200" height="900" fill="#000000"/>
+  <rect x="22.5" y="22.5" width="1155" height="855" fill="none" stroke="#bdbdbd" stroke-width="1"/>
+  <g fill="none" stroke-width="3">
+    <circle cx="600" cy="378" r="198" stroke="#FFFFFF"/>
+    <circle cx="600" cy="378" r="89.10000000000001" stroke="#CE3029"/>
+    <path d="M600 81V259.2M600 496.8V675M303 378H481.2M718.8 378H897" stroke="#FFFFFF"/>
+  </g>
+  <text x="45" y="85" font-size="25" font-weight="600" letter-spacing="4.5" fill="#bdbdbd">BRANDING</text>
+  <text x="1155" y="85" font-size="25" font-weight="600" letter-spacing="4.5" fill="#bdbdbd" text-anchor="end">03 / 03</text>
+  <text x="45" y="800" font-size="77" font-weight="700" fill="#FFFFFF">PLACEHOLDER</text>
+  <text x="45" y="855" font-size="25" font-weight="600" letter-spacing="4.5" fill="#bdbdbd">STATIONERY</text>
+</svg>
