@@ -1,0 +1,42 @@
+/* Grid field: faint white lines in a stepped silhouette (an echo of the hero skyline) whose edges fade into the page,
+   with a small patch that brightens around a mouse pointer. One component; each instance sets its outline in --shape,
+   and js/grid.js turns that outline into a soft mask (clip-path is the no-script fallback). Fields paint under text,
+   so their container needs its own stacking context (isolation: isolate). */
+.grid-field {
+  --grid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M28 0H0V28' fill='none' stroke='%23fff' stroke-width='1'/%3E%3C/svg%3E");
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  clip-path: var(--shape);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+.grid-field::before, .grid-field-lit { content: ""; position: absolute; inset: 0; background: var(--grid); }
+.grid-field::before { opacity: 0.09; }
+.grid-field-lit {
+  opacity: 0;
+  -webkit-mask-image: radial-gradient(circle 90px at var(--mx, 50%) var(--my, 50%), #000, transparent);
+  mask-image: radial-gradient(circle 90px at var(--mx, 50%) var(--my, 50%), #000, transparent);
+  transition: opacity 0.3s ease;
+}
+.grid-field.is-lit .grid-field-lit { opacity: 0.55; }
+@media (prefers-reduced-motion: reduce) { .grid-field-lit { display: none; } }
+
+/* Project pages: one field beside the title, one across the text, one beside the closing call. */
+.project-head, .project-text, .project-contact { position: relative; isolation: isolate; }
+.grid-field--p-head {
+  top: -1.5rem; right: 0; bottom: -1rem; width: min(42vw, 40rem);
+  --shape: polygon(20% 6%, 44% 6%, 44% 0%, 70% 0%, 70% 12%, 100% 12%, 100% 64%, 88% 64%, 88% 100%, 52% 100%, 52% 86%, 26% 86%, 26% 70%, 0% 70%, 0% 30%, 20% 30%);
+}
+.grid-field--p-text {
+  top: -2rem; right: -1rem; bottom: -2rem; width: 58%;
+  --shape: polygon(8% 10%, 30% 10%, 30% 0%, 62% 0%, 62% 8%, 92% 8%, 92% 28%, 100% 28%, 100% 74%, 84% 74%, 84% 100%, 46% 100%, 46% 90%, 14% 90%, 14% 70%, 0% 70%, 0% 34%, 8% 34%);
+}
+.grid-field--p-contact {
+  top: -2rem; right: 0; bottom: -2rem; width: min(40vw, 34rem);
+  --shape: polygon(12% 0%, 60% 0%, 60% 10%, 100% 10%, 100% 80%, 76% 80%, 76% 100%, 30% 100%, 30% 88%, 0% 88%, 0% 22%, 12% 22%);
+}
+@media (max-width: 640px) {
+  .grid-field--p-head, .grid-field--p-contact { width: 70%; }
+  .grid-field--p-text { width: 90%; }
+}

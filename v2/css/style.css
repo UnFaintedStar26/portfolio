@@ -414,10 +414,19 @@ button.button { cursor: pointer; }
 }
 .project-story h2 { font-size: 1.5rem; margin-bottom: 0.75rem; }
 .deliverables { margin: 0; padding-left: 1.1em; }
+.guide-fonts, .guide-colors { list-style: none; margin: 0; padding: 0; }
+.guide-fonts li { display: grid; margin-bottom: 0.75rem; }
+.guide-colors { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin-top: 0.5rem; font-size: 0.875rem; }
+.guide-colors li { display: flex; align-items: center; gap: 0.5rem; }
+.swatch { width: 1.25rem; height: 1.25rem; border: 1px solid var(--gray-700); }
 .project-images { display: grid; gap: 3rem; }
+/* Images side by side, as many per row as works.js says; one per row on phones. */
+.project-row { display: grid; grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr)); gap: 3rem clamp(1rem, 2vw, 1.5rem); align-items: start; }
+@media (max-width: 600px) { .project-row { grid-template-columns: minmax(0, 1fr); } }
 .project-figure { margin: 0; }
 .project-media { position: relative; z-index: 0; border: 1px solid var(--gray-700); }
 .project-media img { width: 100%; max-height: 88vh; object-fit: contain; background: var(--black); }
+.project-media img.is-long { width: auto; max-height: none; margin-inline: auto; }
 .project-figure figcaption { margin-top: 0.75rem; }
 .has-crosshair .project-media { cursor: none; }
 .project-pager {
@@ -439,7 +448,7 @@ button.button { cursor: pointer; }
 }
 .project-pager a:hover .pager-title { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 .project-contact { margin-top: 5rem; }
-.project-contact h2, .not-found h1 { font-size: clamp(2rem, 4.5vw, 3.5rem); margin-bottom: 1rem; }
+.project-contact h2 { font-size: clamp(2rem, 4.5vw, 3.5rem); margin-bottom: 1rem; }
 
 /* Gallery: dense poster wall of uniform 4:5 tiles */
 .wall {

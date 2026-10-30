@@ -3,31 +3,49 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
   <title>Project — Your Name</title>
   <meta name="description" content="Project details from the portfolio of Your Name.">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/a-header.css">
+  <link rel="stylesheet" href="css/grid.css">
+  <script src="js/frame.js"></script>
+  <script src="content.js"></script>
   <script src="js/works.js" defer></script>
+  <script src="js/grid.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script>
+    /* Names, emails and the header brand follow content.js. Runs after the deferred main.js has rendered the project. */
+    document.addEventListener("DOMContentLoaded", function () {
+      var SITE = window.SITE || {};
+      var name = SITE.name || "Your Name";
+      var email = SITE.email || "hello@yourname.com";
+      document.title = document.title.replace("Your Name", name);
+      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      for (var n; (n = walker.nextNode());) {
+        if (/Your Name|hello@yourname\.com/.test(n.nodeValue)) n.nodeValue = n.nodeValue.replace(/Your Name/g, name).replace(/hello@yourname\.com/g, email);
+      }
+      document.querySelectorAll('a[href="mailto:hello@yourname.com"]').forEach(function (a) { a.href = "mailto:" + email; });
+      if (SITE.brand) document.querySelector(".a-name").textContent = SITE.brand;
+    });
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <a class="brand" href="index.html">Your Name</a>
-    <nav class="site-nav" aria-label="Main">
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="work.html">Work</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="about.html">About</a></li>
-      </ul>
+  <header class="a-header">
+    <a class="a-name" href="index.html#top">Portfolio</a>
+    <nav class="a-nav" aria-label="Sections">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#spotlight">Spotlight</a>
+      <a href="index.html#contact">Contact</a>
+      <a class="a-city" href="../city/index.html">3D city</a>
     </nav>
-    <a class="header-contact" href="mailto:hello@yourname.com">Contact</a>
   </header>
 
   <main id="main" tabindex="-1">
     <noscript><p class="notice">Turn on JavaScript to browse the work, or email <a href="mailto:hello@yourname.com">hello@yourname.com</a>.</p></noscript>
     <div data-project></div>
-    <noscript><p><a class="button" href="work.html">See all work</a></p></noscript>
+    <noscript><p><a class="button" href="index.html#work">See all work</a></p></noscript>
   </main>
 
   <footer class="site-footer">

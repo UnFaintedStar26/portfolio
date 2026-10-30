@@ -1,0 +1,33 @@
+/* The pitch: a film-title caption bar set right after the hero's fade, never over the image. */
+.pitch {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 3rem;
+  margin: 0 var(--gutter);
+  padding: clamp(1rem, 2vw, 1.75rem) 0;
+  border-top: 1px solid var(--white);
+  color: var(--white);
+}
+.pitch:not(:has(.pitch-title)) { display: none; }
+.pitch-title {
+  margin: 0;
+  max-width: 20ch;
+  font: 600 clamp(1.777rem, 3.4vw, 3.157rem)/1.12 var(--display);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.pitch-support {
+  max-width: 46ch;
+  margin: 0;
+  font: 400 1rem/1.6 var(--text);
+  color: var(--white);
+  text-wrap: pretty;
+}
+
+@media (max-width: 760px) {
+  .pitch { flex-direction: column; align-items: flex-start; }
+  .pitch-title { font-size: clamp(1.5rem, 6.6vw, 2.369rem); }
+}

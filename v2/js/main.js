@@ -10,7 +10,7 @@
   var canReveal = !reduceMotion && "IntersectionObserver" in window;
 
   var WORKS = window.WORKS || [];
-  var CATEGORY = { branding: "Branding", poster: "Poster", illustration: "Illustration" };
+  var CATEGORY = window.CATEGORIES || {};
   var SITE_NAME = "Your Name";
   var EMAIL = "hello@yourname.com";
 
@@ -26,62 +26,36 @@
 
   function pad(n) { return (n < 10 ? "0" : "") + n; }
 
+  function gridField(kind) {
+    return h("span", { "class": "grid-field grid-field--" + kind, "aria-hidden": "true" }, h("span", { "class": "grid-field-lit" }));
+  }
+
   function categoryLabel(work) {
     return h("span", { "class": "label" }, [h("span", { "class": "marker", "aria-hidden": "true" }), CATEGORY[work.category]]);
   }
 
   function projectHref(work) { return "project.html?id=" + encodeURIComponent(work.id); }
 
-  /* ---------- Home (featured) and Work (all): uniform cards ---------- */
-
-  function card(work, index) {
-    var cover = work.images[0];
-    return h("li", { "class": "card", "data-cat": work.category }, [
-      h("a", { "class": "card-link", href: projectHref(work) }, [
-        h("div", { "class": "card-media" }, [
-          h("img", { src: cover.src, alt: cover.alt, loading: index < 4 ? "eager" : "lazy" })
-        ]),
-        h("h3", { "class": "card-title" }, work.title),
-        h("div", { "class": "card-meta" }, [categoryLabel(work), h("span", { "class": "label" }, String(work.year))])
-      ])
-    ]);
-  }
-
-  document.querySelectorAll("[data-works]").forEach(function (list) {
-    var works = list.getAttribute("data-works") === "featured"
-      ? WORKS.filter(function (w) { return w.featured; })
-      : WORKS;
-    works.forEach(function (w, i) { list.appendChild(card(w, i)); });
-  });
-
-  /* Work filter: real buttons with aria-pressed, state kept in ?cat= so views can be shared. */
-  var filter = document.querySelector("[data-filter]");
-  if (filter) {
-    var buttons = filter.querySelectorAll("button");
-    var count = document.querySelector("[data-filter-count]");
-    var cards = document.querySelectorAll("[data-works='all'] .card");
-
-    var apply = function (cat, updateUrl) {
-      if (!CATEGORY[cat]) cat = "";
-      var shown = 0;
-      buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-cat") === cat)); });
-      cards.forEach(function (c) {
-        var match = !cat || c.getAttribute("data-cat") === cat;
-        c.hidden = !match;
-        if (match) shown++;
-      });
-      if (count) count.textContent = "Showing " + shown + " of " + cards.length + " works";
-      if (updateUrl) {
-        var url = new URL(location.href);
-        if (cat) url.searchParams.set("cat", cat); else url.searchParams.delete("cat");
-        history.replaceState(null, "", url.href);
-      }
-    };
-
-    buttons.forEach(function (b) {
-      b.addEventListener("click", function () { apply(b.getAttribute("data-cat"), true); });
+  /* The project's images grouped into rows, as set by work.rows in works.js; images left over sit one per row. */
+  function imageRows(work) {
+    var sizes = (work.rows || []).slice();
+    var rows = [];
+    for (var i = 0; i < work.images.length; ) {
+      var n = Math.max(1, sizes.shift() | 0);
+      rows.push(work.images.slice(i, i + n).map(function (img, k) { return { img: img, n: i + k }; }));
+      i += n;
+    }
+    return rows.map(function (row) {
+      return h("div", { "class": "project-row", style: "--cols:" + row.length }, row.map(function (p) {
+        var img = h("img", { src: p.img.src, alt: p.img.alt, loading: p.n < 2 ? "eager" : "lazy" });
+        /* A very tall page (a full website screenshot) shows at its own width, uncapped, so it stays readable. */
+        img.addEventListener("load", function () { if (img.naturalHeight > 2 * img.naturalWidth) img.classList.add("is-long"); });
+        return h("figure", { "class": "project-figure" }, [
+          h("div", { "class": "project-media" }, img),
+          h("figcaption", { "class": "label" }, pad(p.n + 1) + " / " + pad(work.images.length))
+        ]);
+      }));
     });
-    apply(new URLSearchParams(location.search).get("cat") || "", false);
   }
 
   /* ---------- Project detail: project.html?id=<id> ---------- */
@@ -93,12 +67,14 @@
     WORKS.forEach(function (w, i) { if (w.id === id) at = i; });
 
     if (at < 0) {
-      document.title = "Project not found — " + SITE_NAME;
-      projectRoot.appendChild(h("div", { "class": "page-head not-found" }, [
-        h("p", { "class": "label" }, "Error"),
-        h("h1", {}, "Project not found"),
-        h("p", {}, "There is no project at this address. It may have been renamed or removed."),
-        h("p", {}, h("a", { "class": "button", href: "work.html" }, "See all work"))
+      /* Unknown or missing id: a quiet "work in progress" page, worded in content.js, linking back into direction A. */
+      var wip = (window.SITE && window.SITE.workInProgress) || {};
+      var heading = wip.heading || "Work in Progress";
+      document.title = heading + " — " + SITE_NAME;
+      projectRoot.appendChild(h("article", { "class": "project" }, [
+        h("p", {}, h("a", { "class": "back-link label", href: "index.html#work" }, "← All work")),
+        h("h1", { "class": "project-title" }, heading),
+        h("p", { "class": "project-summary" }, wip.line || "This project is still being put together. Check back soon.")
       ]));
     } else {
       var work = WORKS[at];
@@ -108,112 +84,67 @@
       var desc = document.querySelector('meta[name="description"]');
       if (desc) desc.setAttribute("content", work.summary);
 
+      /* Facts the owner hasn't supplied yet are null in works.js and read as a plain "To be added". */
       var fact = function (term, value) {
-        return h("div", {}, [h("dt", { "class": "label" }, term), h("dd", {}, value == null ? "—" : String(value))]);
+        return h("div", {}, [h("dt", { "class": "label" }, term), h("dd", {}, value == null ? "To be added" : String(value))]);
       };
       var story = [["Brief", work.brief], ["Approach", work.approach], ["Outcome", work.outcome]]
         .filter(function (s) { return s[1]; })
         .map(function (s) { return h("section", { "class": "project-story" }, [h("h2", {}, s[0]), h("p", {}, s[1])]); });
-      if (work.category === "branding" && work.deliverables.length) {
+      if (work.deliverables && work.deliverables.length) {
         story.push(h("section", { "class": "project-story" }, [
           h("h2", {}, "Deliverables"),
           h("ul", { "class": "deliverables" }, work.deliverables.map(function (d) { return h("li", {}, d); }))
         ]));
       }
+      var guide = work.styleGuide;
+      if (guide) {
+        story.push(h("section", { "class": "project-story" }, [
+          h("h2", {}, "Style guide"),
+          guide.fonts ? h("ul", { "class": "guide-fonts" }, guide.fonts.map(function (f) {
+            return h("li", {}, [h("span", { "class": "label" }, f[0]), " " + f[1]]);
+          })) : null,
+          h("ul", { "class": "guide-colors", "aria-label": "Colors" }, (guide.colors || []).map(function (c) {
+            return h("li", {}, [h("span", { "class": "swatch", style: "background:" + c }), c]);
+          }))
+        ]));
+      }
 
       projectRoot.appendChild(h("article", { "class": "project" }, [
-        h("p", {}, h("a", { "class": "back-link label", href: "work.html" }, "← All work")),
+        h("p", {}, h("a", { "class": "back-link label", href: "index.html#work" }, "← All work")),
         h("header", { "class": "project-head" }, [
+          gridField("p-head"),
           categoryLabel(work),
           h("h1", { "class": "project-title" }, work.title),
           h("p", { "class": "project-summary" }, work.summary)
         ]),
         h("dl", { "class": "project-facts" }, [
           fact("Client", work.client),
-          fact("Year", work.year),
+          work.started ? fact(work.dateLabel || "Started", work.started) : fact("Year", work.year),
           fact("Category", CATEGORY[work.category]),
-          fact("Medium", work.medium),
-          fact("Size", work.size)
+          fact("Role", work.role),
+          fact("Images", work.images.length)
         ]),
-        story.length ? h("div", { "class": "project-text" }, story) : null,
-        h("div", { "class": "project-images" }, work.images.map(function (img, i) {
-          return h("figure", { "class": "project-figure" }, [
-            h("div", { "class": "project-media" }, h("img", { src: img.src, alt: img.alt, loading: i < 2 ? "eager" : "lazy" })),
-            h("figcaption", { "class": "label" }, pad(i + 1) + " / " + pad(work.images.length))
-          ]);
-        })),
+        story.length ? h("div", { "class": "project-text" }, [gridField("p-text")].concat(story)) : null,
+        h("div", { "class": "project-images" }, imageRows(work)),
         h("nav", { "class": "project-pager", "aria-label": "More projects" }, [
           h("a", { href: projectHref(prev), rel: "prev" }, [h("span", { "class": "label" }, "← Previous"), h("span", { "class": "pager-title" }, prev.title)]),
           h("a", { href: projectHref(next), rel: "next" }, [h("span", { "class": "label" }, "Next →"), h("span", { "class": "pager-title" }, next.title)])
         ]),
         h("section", { "class": "project-contact", "aria-labelledby": "project-contact-title" }, [
+          gridField("p-contact"),
           h("h2", { id: "project-contact-title" }, "Have a project like this in mind?"),
-          h("p", {}, "I take on branding, poster and illustration work. Tell me about yours."),
+          h("p", {}, "Tell me about it."),
           h("a", { "class": "button", href: "mailto:" + EMAIL }, "Email " + EMAIL)
         ])
       ]));
     }
-  }
-
-  /* ---------- Gallery: poster wall of every image, with a <dialog> lightbox ---------- */
-
-  var wall = document.querySelector("[data-wall]");
-  var lightbox = document.querySelector("[data-lightbox]");
-  if (wall && lightbox) {
-    var pieces = [];
-    WORKS.forEach(function (w) {
-      w.images.forEach(function (img, i) { pieces.push({ work: w, img: img, n: i + 1, of: w.images.length }); });
-    });
-
-    pieces.forEach(function (p, i) {
-      wall.appendChild(h("li", {}, h("button", {
-        type: "button",
-        "class": "wall-tile card-link",
-        "data-index": String(i),
-        "aria-label": "Open " + p.work.title + ", image " + p.n + " of " + p.of,
-        "aria-haspopup": "dialog"
-      }, h("div", { "class": "card-media" }, h("img", { src: p.img.src, alt: p.img.alt, loading: i < 12 ? "eager" : "lazy" })))));
-    });
-    var countEl = document.querySelector("[data-wall-count]");
-    if (countEl) countEl.textContent = pieces.length + " pieces from " + WORKS.length + " projects";
-
-    var lbImg = lightbox.querySelector("[data-lb-img]");
-    var lbTitle = lightbox.querySelector("[data-lb-title]");
-    var lbMeta = lightbox.querySelector("[data-lb-meta]");
-    var lbLink = lightbox.querySelector("[data-lb-link]");
-    var lbCount = lightbox.querySelector("[data-lb-count]");
-    var current = 0;
-    var opener = null;
-
-    var show = function (i) {
-      current = (i + pieces.length) % pieces.length;
-      var p = pieces[current];
-      lbImg.src = p.img.src;
-      lbImg.alt = p.img.alt;
-      lbTitle.textContent = p.work.title;
-      lbMeta.textContent = CATEGORY[p.work.category] + " · " + p.work.year + " · image " + p.n + " of " + p.of;
-      lbLink.href = projectHref(p.work);
-      lbCount.textContent = pad(current + 1) + " / " + pad(pieces.length);
-    };
-
-    wall.addEventListener("click", function (e) {
-      var tile = e.target.closest(".wall-tile");
-      if (!tile) return;
-      opener = tile;
-      show(Number(tile.getAttribute("data-index")));
-      lightbox.showModal();
-    });
-    lightbox.querySelector("[data-lb-prev]").addEventListener("click", function () { show(current - 1); });
-    lightbox.querySelector("[data-lb-next]").addEventListener("click", function () { show(current + 1); });
-    lightbox.querySelector("[data-lb-close]").addEventListener("click", function () { lightbox.close(); });
-    lightbox.addEventListener("keydown", function (e) {
-      if (e.key === "ArrowLeft") { e.preventDefault(); show(current - 1); }
-      if (e.key === "ArrowRight") { e.preventDefault(); show(current + 1); }
-    });
-    /* Esc closes natively (cancel -> close). Either way, focus goes back to the tile that opened it. */
-    lightbox.addEventListener("close", function () {
-      if (opener) opener.focus();
-    });
+    /* Grid fields (js/grid.js): soften once rendered and whenever the page width changes. */
+    if (window.softenGridFields) {
+      softenGridFields();
+      var gridTimer;
+      addEventListener("resize", function () { clearTimeout(gridTimer); gridTimer = setTimeout(softenGridFields, 150); });
+    }
   }
 
   /* ---------- Reveal: halftone/grain to clear, once, as artwork scrolls into view ---------- */

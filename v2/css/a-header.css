@@ -1,0 +1,38 @@
+/* The site header, shared by index.html (laid over the hero banner) and project.html:
+   the brand on the left in A's style, the section links on the right. */
+.a-header {
+  --a-gutter: clamp(1rem, 3.4vw, 3rem);
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 1.5rem;
+  padding: clamp(0.5rem, 1.5svh, 1rem) var(--a-gutter) 0;
+}
+.a-name {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: 0;
+  font: 700 clamp(1.333rem, 2.4vw, 2.369rem)/1 "Space Grotesk", sans-serif;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #FFFFFF;
+  /* The red pass, printed slightly out of register under the white. */
+  text-shadow: -0.04em 0.03em 0 #CE3029;
+}
+.a-nav {
+  display: flex;
+  gap: clamp(0.25rem, 1vw, 1rem);
+  margin-right: -0.5rem;
+  font: 500 0.9375rem/1 "Inter", sans-serif;
+}
+.a-nav a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0 0.5rem; color: #FFFFFF; text-decoration: none; }
+.a-nav a:hover { text-decoration: underline; text-decoration-color: #CE3029; text-decoration-thickness: 2px; text-underline-offset: 0.3em; }
+.a-header a:focus-visible { outline: 3px solid #CE3029; outline-offset: 4px; }
+/* Link to the 3D city. A thin inset frame sets it apart from the section links without changing the nav's size. Hidden when the site is shown inside the city (js/frame.js adds .framed). */
+.a-nav .a-city { box-shadow: inset 0 0 0 1px #FFFFFF; }
+.framed .a-nav .a-city { display: none; }
