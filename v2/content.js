@@ -43,6 +43,9 @@ window.SITE = {
     // Which part of the photo stays in view when phones crop it, as "left-right top-bottom".
     // "50% 50%" keeps the middle; "50% 100%" keeps the bottom (here, the skyline) when the top is cropped.
     focus: "50% 100%",
+    // The two lines over the banner, between the clouds and the buildings.
+    title: "MELVIN MINCHALA",
+    subtitle: "GRAPHIC DESIGN PORTFOLIO",
   },
 
   // The links at the top of the page.

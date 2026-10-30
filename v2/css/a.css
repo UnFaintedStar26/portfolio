@@ -64,6 +64,7 @@ a { color: inherit; }
   height: min(100svh, max(34rem, 46vw));
   overflow: clip;
   isolation: isolate;
+  container-type: inline-size;
 }
 .hero > .a-header { position: absolute; inset: 0 0 auto; }
 /* A soft black scrim behind the header keeps its text readable over any picture. */
@@ -102,6 +103,41 @@ a { color: inherit; }
 .banner-label { margin: 0; font: 600 var(--step-1)/1.3 var(--text); text-wrap: balance; }
 .banner-label span { white-space: nowrap; }
 .banner-path { margin: 0; font-size: var(--step-fine); color: var(--fine); overflow-wrap: anywhere; }
+
+/* Name over the banner, in the band between the clouds and the buildings. The banner is cover-cropped from the
+   bottom (hero.focus "50% 100%"), so the band sits a fixed share of the *picture's* height above its foot:
+   the picture is as tall as the hero, or 1080/1920 of the width when that is taller. */
+.hero-title {
+  --band: 0.47; /* the band's centre, as a share of the picture's height measured up from its bottom edge */
+  position: absolute;
+  left: 50%;
+  top: calc(100% - var(--band) * max(100%, 56.25cqw));
+  transform: translate(-50%, -50%);
+  width: max-content;
+  max-width: calc(100% - 2 * var(--gutter));
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.35rem, 0.8vw, 0.6rem);
+  text-align: center;
+  pointer-events: none;
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.75);
+}
+.hero-name {
+  margin: 0;
+  font: 700 clamp(1.25rem, 3.6vw, 3.4rem)/1 var(--display);
+  letter-spacing: 0.22em;
+  margin-right: -0.22em; /* optical centring: tracking adds space after the last letter */
+  color: var(--white);
+}
+.hero-rule { width: clamp(2.5rem, 5vw, 4.5rem); height: 2px; background: var(--red); }
+.hero-role {
+  margin: 0;
+  font: 500 clamp(0.625rem, 0.9vw, 0.875rem)/1 var(--text);
+  letter-spacing: 0.3em;
+  margin-right: -0.3em;
+  color: var(--white);
+}
+.banner:not(.has-image) ~ .hero-title { display: none; }
 
 /* Fine-print contact that stays one step away once the hero is gone. */
 .pin-mail {
