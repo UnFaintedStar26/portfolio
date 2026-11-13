@@ -11,7 +11,7 @@
   border-top: 1px solid var(--white);
   color: var(--white);
 }
-.pitch:not(:has(.pitch-title)) { display: none; }
+.pitch:not(:has(.pitch-title, .pitch-support)) { display: none; }
 .pitch-title {
   margin: 0;
   max-width: 20ch;
@@ -26,6 +26,7 @@
   color: var(--white);
   text-wrap: pretty;
 }
+.pitch:not(:has(.pitch-title)) .pitch-support { max-width: 52ch; font-size: clamp(1.125rem, 1.6vw, 1.333rem); }
 
 @media (max-width: 760px) {
   .pitch { flex-direction: column; align-items: flex-start; }

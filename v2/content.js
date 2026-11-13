@@ -27,8 +27,8 @@ window.SITE = {
 
   // The pitch bar just under the banner: one headline and one short paragraph. Rewrite freely.
   pitch: {
-    headline: "Every project is a world to build.",
-    support: "I’m a graphic designer who builds visual worlds: a cybersecurity campaign that makes staying safe online feel urgent, sci-fi posters for films I love, book covers and an image journal. Bold type, one loud red, and a clear story in every piece.",
+    headline: "",
+    support: "A cybersecurity campaign that makes staying safe online feel urgent, sci-fi posters for films I love, book covers and an image journal. Made in black, white and one red.",
   },
 
   // Your email address. Every “email me” link on the page uses it.

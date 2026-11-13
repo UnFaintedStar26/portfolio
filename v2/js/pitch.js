@@ -2,8 +2,7 @@
 (() => {
   const root = document.getElementById("pitch");
   const pitch = window.SITE && window.SITE.pitch;
-  if (!root || !pitch || !pitch.headline) return;
-  const heading = Object.assign(document.createElement("h2"), { className: "pitch-title", textContent: pitch.headline });
-  root.append(heading);
+  if (!root || !pitch || !(pitch.headline || pitch.support)) return;
+  if (pitch.headline) root.append(Object.assign(document.createElement("h2"), { className: "pitch-title", textContent: pitch.headline }));
   if (pitch.support) root.append(Object.assign(document.createElement("p"), { className: "pitch-support", textContent: pitch.support }));
 })();
