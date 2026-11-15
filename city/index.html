@@ -11,7 +11,7 @@
   </head>
   <body>
     <div id="root"><div class="lds" role="status" aria-label="Loading"><div class="lds-grid"></div><div class="lds-sync"></div><div class="lds-corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div></div>
-  <script type="application/json" id="app-gz">["app-1898c3201bce-0.bin","app-1898c3201bce-1.bin","app-1898c3201bce-2.bin"]</script><script type="module">const load=async()=>{const d=document.getElementById('app-gz'),names=JSON.parse(d.text);d.remove()
+  <script type="application/json" id="app-gz">["app-56d8bafe5924-0.bin","app-56d8bafe5924-1.bin","app-56d8bafe5924-2.bin"]</script><script type="module">const load=async()=>{const d=document.getElementById('app-gz'),names=JSON.parse(d.text);d.remove()
 const parts=await Promise.all(names.map(async name=>{const r=await fetch(new URL(name,document.baseURI));if(!r.ok)throw Error(name+': HTTP '+r.status);return r.arrayBuffer()}))
 return new Response(new Blob(parts).stream().pipeThrough(new DecompressionStream('gzip')).pipeThrough(new DecompressionStream('gzip')),{headers:{'content-type':'text/javascript'}}).blob()}
 try{const u=URL.createObjectURL(await load())
