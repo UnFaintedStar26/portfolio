@@ -1,0 +1,82 @@
+{
+ "landscape": {
+  "label": "LANDSCAPE",
+  "px": [
+   960,
+   540
+  ],
+  "w": 4,
+  "bottom": 3.1,
+  "mount": "wall",
+  "use": "street display"
+ },
+ "cinema": {
+  "label": "CINEMA",
+  "px": [
+   1260,
+   540
+  ],
+  "w": 6.3,
+  "bottom": 3.7,
+  "mount": "wall",
+  "use": "wide street or facade"
+ },
+ "banner": {
+  "label": "BANNER",
+  "px": [
+   1200,
+   400
+  ],
+  "w": 6,
+  "bottom": 2.6,
+  "mount": "hanging",
+  "use": "over a walkway or shopfront"
+ },
+ "vertical": {
+  "label": "VERTICAL",
+  "px": [
+   540,
+   960
+  ],
+  "w": 1.8,
+  "bottom": 2.75,
+  "mount": "pole",
+  "use": "pole or column"
+ },
+ "poster": {
+  "label": "POSTER",
+  "px": [
+   540,
+   676
+  ],
+  "w": 1.62,
+  "bottom": 2.1,
+  "mount": "kiosk",
+  "use": "standing kiosk",
+  "aspect": "about 4:5"
+ },
+ "holo": {
+  "label": "HOLO",
+  "px": [
+   900,
+   540
+  ],
+  "w": 4.5,
+  "bottom": 2.3,
+  "mount": "plinth",
+  "use": "floating sign",
+  "aspect": "5:3"
+ },
+ "plaza": {
+  "label": "PLAZA",
+  "px": [
+   960,
+   540
+  ],
+  "w": 24,
+  "bottom": 7,
+  "mount": "plinth",
+  "use": "the big plaza version",
+  "line": "16:9 · plays landscape 960 × 540"
+ }
+}
