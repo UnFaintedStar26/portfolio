@@ -1,0 +1,21 @@
+{
+ "seed": 42,
+ "house": {
+  "en": "LOW TABLE",
+  "jp": "\u8336\u53f0",
+  "sub": "TEA HOUSE \u00b7 STAY AWHILE",
+  "blade": "LOW TABLE"
+ },
+ "sx": -1,
+ "gearFlip": -1,
+ "redLanterns": true,
+ "trees": false,
+ "tray": 0,
+ "footprint": {
+  "w": 13.0,
+  "d": 10.0,
+  "ph": 1.2,
+  "height": 7.55
+ },
+ "highest": 8.33
+}

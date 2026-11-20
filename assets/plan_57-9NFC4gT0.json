@@ -1,0 +1,21 @@
+{
+ "seed": 57,
+ "house": {
+  "en": "ONE ROOM",
+  "jp": "\u4e00\u9593",
+  "sub": "TEA HOUSE \u00b7 OPEN LATE",
+  "blade": "ONE ROOM"
+ },
+ "sx": 1,
+ "gearFlip": -1,
+ "redLanterns": true,
+ "trees": false,
+ "tray": 2,
+ "footprint": {
+  "w": 13.0,
+  "d": 10.0,
+  "ph": 1.2,
+  "height": 7.55
+ },
+ "highest": 8.33
+}
