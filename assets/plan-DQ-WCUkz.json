@@ -1,0 +1,17 @@
+{
+ "seed": 1263413423,
+ "name": "Kai Terrace",
+ "w": 20.0,
+ "d": 22.0,
+ "floors": 3,
+ "fh": 3.2,
+ "height": 9.6,
+ "stalls": [
+  "STEP BROTH",
+  "GREEN LANDING"
+ ],
+ "draws": {
+  "near": 4,
+  "far": 1
+ }
+}
